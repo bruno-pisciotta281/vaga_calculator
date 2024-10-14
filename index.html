@@ -201,7 +201,7 @@
         function enviarDadosAPI(nome, sobrenome, email, telefone) {
             const url = 'https://track.embluemail.com/contacts/event';  // URL correta para eventos
             const headers = {
-                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ=',  // Verifique se este token está correto
+                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ=',  // Chave Base64 correta
                 'Content-Type': 'application/json'
             };
             const data = {
@@ -225,7 +225,6 @@
             })
             .then(response => {
                 if (response.ok) {
-                    // Move para a próxima etapa após o sucesso
                     steps[currentStep].classList.remove("form-step-active");
                     indicators[currentStep].classList.remove("active");
                     currentStep++;
@@ -233,17 +232,15 @@
                     indicators[currentStep].classList.add("active");
                     console.log('Dados enviados com sucesso!');
                 } else {
-                    // Reativa o botão e exibe mensagem de erro
-                    document.getElementById("sendInfo").disabled = false;
                     alert("Erro ao enviar dados. Tente novamente.");
                 }
             })
             .catch(error => {
                 console.error('Erro:', error);
-                document.getElementById("sendInfo").disabled = false;  // Reativa o botão em caso de erro
                 alert('Erro ao enviar dados.');
             });
         }
+
 
         // Função para validar os inputs
         function validateInputs() {
