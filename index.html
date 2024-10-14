@@ -161,6 +161,8 @@
         // Função para enviar os dados à API na segunda etapa
         document.getElementById("sendInfo").addEventListener("click", function() {
             if (validateInputs()) {
+                // Desativa o botão para evitar envios múltiplos
+                this.disabled = true;
                 enviarDadosAPI(
                     document.getElementById("firstName").value,
                     document.getElementById("lastName").value,
@@ -197,28 +199,48 @@
         });
 
         function enviarDadosAPI(nome, sobrenome, email, telefone) {
-            const url = 'https://api.embluemail.com/Services/EmBlue3Service.svc/Json/NewContact';
+            const url = 'https://track.embluemail.com/contacts/event';  // URL correta para eventos
             const headers = {
-                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ=',
+                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ=',  // Verifique se este token está correto
                 'Content-Type': 'application/json'
             };
             const data = {
-                "Email": email,
-                "EditCustomFields": `apellido:|:${sobrenome}:|:1|||nombre:|:${nome}:|:1|||telefono:|:${telefone}:|:1`,
-                "Token": "seu-token-aqui"
+                "email": email,  // Email inserido pelo usuário
+                "eventName": "Simulação_Vaga_Tramasso",  // Nome do evento
+                "attributes": {
+                    "event_items": [
+                        {
+                            "firstName": nome,
+                            "lastName": sobrenome,
+                            "phone": telefone
+                        }
+                    ]
+                }
             };
 
             fetch(url, {
                 method: 'POST',
                 headers: headers,
-                body: JSON.stringify(data),
-                mode: 'no-cors'
+                body: JSON.stringify(data)
             })
             .then(response => {
-                console.log('Requisição enviada no modo no-cors.');
+                if (response.ok) {
+                    // Move para a próxima etapa após o sucesso
+                    steps[currentStep].classList.remove("form-step-active");
+                    indicators[currentStep].classList.remove("active");
+                    currentStep++;
+                    steps[currentStep].classList.add("form-step-active");
+                    indicators[currentStep].classList.add("active");
+                    console.log('Dados enviados com sucesso!');
+                } else {
+                    // Reativa o botão e exibe mensagem de erro
+                    document.getElementById("sendInfo").disabled = false;
+                    alert("Erro ao enviar dados. Tente novamente.");
+                }
             })
             .catch(error => {
                 console.error('Erro:', error);
+                document.getElementById("sendInfo").disabled = false;  // Reativa o botão em caso de erro
                 alert('Erro ao enviar dados.');
             });
         }
@@ -262,5 +284,6 @@
             return resultado.toFixed(2);
         }
     </script>
+
 </body>
 </html>
