@@ -197,23 +197,15 @@
         });
 
         function enviarDadosAPI(nome, sobrenome, email, telefone) {
-            const url = 'https://track.embluemail.com/contacts/event';
+            const url = 'https://api.embluemail.com/Services/EmBlue3Service.svc/Json/NewContact'; // URL correta
             const headers = {
-                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ=',
+                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ=',  // Verifique se este token está correto
                 'Content-Type': 'application/json'
             };
             const data = {
-                "email": email,  // Email inserido pelo usuário
-                "eventName": "NewContact",  // Pode ser o nome do evento, ajuste conforme necessário
-                "attributes": {
-                    "event_items": [
-                        {
-                            "firstName": nome,
-                            "lastName": sobrenome,
-                            "phone": telefone
-                        }
-                    ]
-                }
+                "Email": email,  // Email inserido pelo usuário
+                "EditCustomFields": `apellido:|:${sobrenome}:|:1|||nombre:|:${nome}:|:1|||telefono:|:${telefone}:|:1`,  // Campos personalizados conforme a documentação
+                "Token": "12771-nLV-wWAsh-xmNR5-0yAPc0a6Va"  // Token de autenticação
             };
 
             fetch(url, {
@@ -237,6 +229,7 @@
                 alert('Erro ao enviar dados.');
             });
         }
+
 
         // Função para validar os inputs
         function validateInputs() {
