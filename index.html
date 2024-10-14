@@ -201,8 +201,8 @@
         function enviarDadosAPI(nome, sobrenome, email, telefone) {
             const url = 'https://track.embluemail.com/contacts/event';  // URL correta para eventos
             const headers = {
-                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ=',  // Chave Base64 correta
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',  // Cabeçalho correto para JSON
+                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ='  // Cabeçalho de autorização em Base64
             };
             const data = {
                 "email": email,  // Email inserido pelo usuário
@@ -240,8 +240,7 @@
                 alert('Erro ao enviar dados.');
             });
         }
-
-
+        
         // Função para validar os inputs
         function validateInputs() {
             const inputs = steps[currentStep].querySelectorAll("input, select");
