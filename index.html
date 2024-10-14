@@ -198,15 +198,16 @@
             });
         });
 
+        // Função para autenticar e obter o token temporário
         function autenticarUsuario() {
             const url = 'https://api.embluemail.com/Services/Emblue3Service.svc/json/Authenticate';
             const headers = {
                 'Content-Type': 'application/json'
             };
             const data = {
-                "User": "janderson.alves+1@novotempo-rh.com.br",  // Seu e-mail
-                "Pass": "Novotempo@01",              // Sua senha
-                "Token": "350ab091bf7840f2ab230251a33afb74"       // Token fornecido pela Emblue
+                "User": "seuemail@dominio.com",  // Seu e-mail de usuário
+                "Pass": "suasenha",              // Sua senha
+                "Token": "seutokeninicial"       // Token inicial fornecido pela Emblue
             };
 
             return fetch(url, {
@@ -229,12 +230,13 @@
             });
         }
 
+        // Função para enviar os dados à API usando o token temporário
         function enviarDadosAPI(nome, sobrenome, email, telefone) {
-            autenticarUsuario().then(tokenTemporario => {  // Autenticação antes de enviar os dados
+            autenticarUsuario().then(tokenTemporario => {
                 const url = 'https://track.embluemail.com/contacts/event';  // URL correta para eventos
                 const headers = {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${tokenTemporario}`  // Use o token temporário aqui
+                    'Authorization': `Bearer ${tokenTemporario}`  // Usa o token temporário no cabeçalho
                 };
                 const data = {
                     "email": email,  // Email inserido pelo usuário
@@ -258,11 +260,7 @@
                 .then(response => {
                     if (response.ok) {
                         console.log('Dados enviados com sucesso!');
-                        steps[currentStep].classList.remove("form-step-active");
-                        indicators[currentStep].classList.remove("active");
-                        currentStep++;
-                        steps[currentStep].classList.add("form-step-active");
-                        indicators[currentStep].classList.add("active");
+                        // Atualiza o passo do formulário, por exemplo
                     } else {
                         alert("Erro ao enviar dados. Tente novamente.");
                     }
@@ -277,8 +275,7 @@
             });
         }
 
-
-        // Função para validar os inputs
+        // Função para validar inputs
         function validateInputs() {
             const inputs = steps[currentStep].querySelectorAll("input, select");
             let isValid = true;
@@ -292,7 +289,7 @@
             });
             return isValid;
         }
-
+        
         // Exibir resultados na terceira etapa
         function displayResults() {
             document.getElementById("res-vaga").innerText = document.getElementById("tipoVaga").value;
