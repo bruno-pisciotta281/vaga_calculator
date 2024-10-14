@@ -197,39 +197,31 @@
         });
 
         function enviarDadosAPI(nome, sobrenome, email, telefone) {
-            const url = 'https://api.embluemail.com/Services/EmBlue3Service.svc/Json/NewContact'; // URL correta
+            const url = 'https://api.embluemail.com/Services/EmBlue3Service.svc/Json/NewContact';
             const headers = {
-                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ=',  // Verifique se este token está correto
+                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ=',
                 'Content-Type': 'application/json'
             };
             const data = {
-                "Email": email,  // Email inserido pelo usuário
-                "EditCustomFields": `apellido:|:${sobrenome}:|:1|||nombre:|:${nome}:|:1|||telefono:|:${telefone}:|:1`,  // Campos personalizados conforme a documentação
-                "Token": "12771-nLV-wWAsh-xmNR5-0yAPc0a6Va"  // Token de autenticação
+                "Email": email,
+                "EditCustomFields": `apellido:|:${sobrenome}:|:1|||nombre:|:${nome}:|:1|||telefono:|:${telefone}:|:1`,
+                "Token": "seu-token-aqui"
             };
 
             fetch(url, {
                 method: 'POST',
                 headers: headers,
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                mode: 'no-cors'
             })
             .then(response => {
-                if (response.ok) {
-                    steps[currentStep].classList.remove("form-step-active");
-                    indicators[currentStep].classList.remove("active");
-                    currentStep++;
-                    steps[currentStep].classList.add("form-step-active");
-                    indicators[currentStep].classList.add("active");
-                } else {
-                    alert("Erro ao enviar dados. Tente novamente.");
-                }
+                console.log('Requisição enviada no modo no-cors.');
             })
             .catch(error => {
                 console.error('Erro:', error);
                 alert('Erro ao enviar dados.');
             });
         }
-
 
         // Função para validar os inputs
         function validateInputs() {
