@@ -226,12 +226,16 @@
             .then(response => {
                 if (response.ok) {
                     console.log('Dados enviados com sucesso!');
-                    // Prosseguir com as etapas do formulário
-                    steps[currentStep].classList.remove("form-step-active");
-                    indicators[currentStep].classList.remove("active");
-                    currentStep++;
-                    steps[currentStep].classList.add("form-step-active");
-                    indicators[currentStep].classList.add("active");
+                    // Verificar se os elementos das etapas estão definidos antes de manipular as classes
+                    if (steps[currentStep] && indicators[currentStep]) {
+                        steps[currentStep].classList.remove("form-step-active");
+                        indicators[currentStep].classList.remove("active");
+                        currentStep++;
+                        steps[currentStep].classList.add("form-step-active");
+                        indicators[currentStep].classList.add("active");
+                    } else {
+                        console.error('Elemento de etapa não encontrado.');
+                    }
                 } else {
                     alert("Erro ao enviar dados. Tente novamente.");
                 }
@@ -241,7 +245,7 @@
                 alert('Erro ao enviar dados.');
             });
         }
-
+        
         // Função para validar inputs
         function validateInputs() {
             const inputs = steps[currentStep].querySelectorAll("input, select");
