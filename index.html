@@ -198,49 +198,86 @@
             });
         });
 
-        function enviarDadosAPI(nome, sobrenome, email, telefone) {
-            const url = 'https://track.embluemail.com/contacts/event';  // URL correta para eventos
+        function autenticarUsuario() {
+            const url = 'https://api.embluemail.com/Services/Emblue3Service.svc/json/Authenticate';
             const headers = {
-                'Content-Type': 'application/json',  // Cabeçalho correto para JSON
-                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ='  // Cabeçalho de autorização em Base64
+                'Content-Type': 'application/json'
             };
             const data = {
-                "email": email,  // Email inserido pelo usuário
-                "eventName": "Simulação_Vaga_Tramasso",  // Nome do evento
-                "attributes": {
-                    "event_items": [
-                        {
-                            "firstName": nome,
-                            "lastName": sobrenome,
-                            "phone": telefone
-                        }
-                    ]
-                }
+                "User": "janderson.alves+1@novotempo-rh.com.br",  // Seu e-mail
+                "Pass": "Novotempo@01",              // Sua senha
+                "Token": "350ab091bf7840f2ab230251a33afb74"       // Token fornecido pela Emblue
             };
 
-            fetch(url, {
+            return fetch(url, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(data)
             })
-            .then(response => {
-                if (response.ok) {
-                    steps[currentStep].classList.remove("form-step-active");
-                    indicators[currentStep].classList.remove("active");
-                    currentStep++;
-                    steps[currentStep].classList.add("form-step-active");
-                    indicators[currentStep].classList.add("active");
-                    console.log('Dados enviados com sucesso!');
+            .then(response => response.json())
+            .then(data => {
+                if (data.Token) {
+                    console.log('Autenticação bem-sucedida:', data.Token);
+                    return data.Token;  // Retorna o token temporário
                 } else {
-                    alert("Erro ao enviar dados. Tente novamente.");
+                    throw new Error('Falha na autenticação');
                 }
             })
             .catch(error => {
-                console.error('Erro:', error);
-                alert('Erro ao enviar dados.');
+                console.error('Erro na autenticação:', error);
+                throw error;
             });
         }
-        
+
+        function enviarDadosAPI(nome, sobrenome, email, telefone) {
+            autenticarUsuario().then(tokenTemporario => {  // Autenticação antes de enviar os dados
+                const url = 'https://track.embluemail.com/contacts/event';  // URL correta para eventos
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${tokenTemporario}`  // Use o token temporário aqui
+                };
+                const data = {
+                    "email": email,  // Email inserido pelo usuário
+                    "eventName": "Simulação_Vaga_Tramasso",  // Nome do evento
+                    "attributes": {
+                        "event_items": [
+                            {
+                                "firstName": nome,
+                                "lastName": sobrenome,
+                                "phone": telefone
+                            }
+                        ]
+                    }
+                };
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Dados enviados com sucesso!');
+                        steps[currentStep].classList.remove("form-step-active");
+                        indicators[currentStep].classList.remove("active");
+                        currentStep++;
+                        steps[currentStep].classList.add("form-step-active");
+                        indicators[currentStep].classList.add("active");
+                    } else {
+                        alert("Erro ao enviar dados. Tente novamente.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar dados:', error);
+                    alert('Erro ao enviar dados.');
+                });
+            }).catch(error => {
+                console.error('Erro na autenticação:', error);
+                alert('Erro na autenticação.');
+            });
+        }
+
+
         // Função para validar os inputs
         function validateInputs() {
             const inputs = steps[currentStep].querySelectorAll("input, select");
