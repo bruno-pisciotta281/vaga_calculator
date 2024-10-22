@@ -3,16 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <title>Simulação de Vaga</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Montserrat", sans-serif;
+        }
+
+        h1{
+            font-size: 30px;
+            text-align: center;
         }
 
         .form-container {
             max-width: 400px;
             margin: 50px auto;
-            padding: 20px;
+            padding: 35px;
             border: 1px solid #ddd;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -103,11 +113,30 @@
         .error {
             border-color: red;
         }
+
+        .vaga-block {
+            margin-bottom: 20px;
+        }
+
+        .add-vaga-btn {
+            margin-bottom: 10px;
+            background-color: #4caf50;
+        }
+
+        .remove-vaga-btn{
+            width: 125px;
+            margin: 0 auto;
+            background-color: #f44336;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="form-container">
+        <h1>Calculadora Fee de Vagas</h1>
+        <center><p>Informe os dados da vaga e obtenha uma cotação online e
+            gratuita.</p></center>
         <!-- Barra de Progresso -->
         <ul class="step-indicator">
             <li class="active" data-step="1"></li>
@@ -117,17 +146,26 @@
 
         <!-- Formulário com Etapas -->
         <div class="form-step form-step-active">
-            <h2>Etapa 1: Informações da Vaga</h2>
-            <input type="text" id="vagaName" placeholder="Nome da Vaga" required>
-            <input type="number" id="salarioBruto" placeholder="Salário Bruto" required>
-            <input type="number" id="quantidadeVagas" placeholder="Quantidade de Vagas" required>
+            <center> <h2>Informações da Vaga</h2> </center>
+            
+            <div id="vaga-container">
+                <div class="vaga-block">
+                    <p><strong>Vaga 01:</strong></p>
+                    <label for="">Título da Vaga</label>
+                    <input type="text" class="vagaName" placeholder="Coordenador de Marketing" required>
+                    <label for="">Salário Bruto</label>
+                    <input type="number" class="salarioBruto" placeholder="8.900,00" required>
+                    <label for="">Quantidade de Vagas</label>
+                    <input type="number" class="quantidadeVagas" placeholder="100" required>
+                    <label for="tipoVaga">Tipo de Vaga:</label>
+                    <select class="tipoVaga">
+                        <option value="Operacional">Operacional</option>
+                        <option value="Coordenacao">Coordenação</option>
+                    </select>
+                </div>
+            </div>
 
-            <label for="tipoVaga">Tipo de Vaga:</label>
-            <select id="tipoVaga">
-              <option value="Operacional">Operacional</option>
-              <option value="Coordenacao">Coordenação</option>
-            </select>
-
+            <button type="button" class="add-vaga-btn">Adicionar Vaga</button>
             <button class="btn-next">Próximo</button>
         </div>
         
@@ -157,11 +195,54 @@
         const prevBtns = document.querySelectorAll(".btn-prev");
         const indicators = document.querySelectorAll(".step-indicator li");
         let currentStep = 0;
-
+        let vagaCount = 2; // Iniciar contagem da segunda vaga (pois a primeira já está aberta)
+    
+        // Função para adicionar uma nova vaga
+        document.querySelector('.add-vaga-btn').addEventListener('click', function() {
+            const vagaContainer = document.getElementById('vaga-container');
+            const vagaBlock = document.createElement('div');
+            vagaBlock.classList.add('vaga-block');
+            vagaBlock.setAttribute('data-vaga', vagaCount); // Atribui um identificador único para cada vaga
+            vagaBlock.innerHTML = `
+                <hr>
+                <p><strong>Vaga 0${vagaCount}:</strong></p>
+                <label for="">Título da Vaga</label>
+                <input type="text" class="vagaName" placeholder="Coordenador de Marketing" required>
+                <label for="">Salário Bruto</label>
+                <input type="number" class="salarioBruto" placeholder="8.900,00" required>
+                <label for="">Quantidade de Vagas</label>
+                <input type="number" class="quantidadeVagas" placeholder="100" required>
+                <label for="tipoVaga">Tipo de Vaga:</label>
+                <select class="tipoVaga">
+                    <option value="Operacional">Operacional</option>
+                    <option value="Coordenacao">Coordenação</option>
+                </select>
+                <button class="remove-vaga-btn">Remover Vaga</button>
+                <hr>
+            `;
+            vagaContainer.appendChild(vagaBlock); // Adiciona o bloco de vaga ao container
+    
+            // Adiciona evento de clique para remover a vaga
+            vagaBlock.querySelector('.remove-vaga-btn').addEventListener('click', function() {
+                vagaContainer.removeChild(vagaBlock); // Remove o bloco de vaga
+                renumerarVagas(); // Atualiza os números das vagas restantes
+            });
+    
+            vagaCount++; // Incrementa o contador a cada nova vaga
+        });
+    
+        // Função para renumerar as vagas após remoção
+            function renumerarVagas() {
+                const vagas = document.querySelectorAll('.vaga-block');
+                vagas.forEach((vaga, index) => {
+                    const vagaTitle = vaga.querySelector('p strong');
+                    vagaTitle.innerText = `Vaga 0${index + 1}:`; // Atualiza o número da vaga, começando de 1
+                });
+            }
+    
         // Função para enviar os dados à API na segunda etapa
         document.getElementById("sendInfo").addEventListener("click", function() {
             if (validateInputs()) {
-                // Desativa o botão para evitar envios múltiplos
                 this.disabled = true;
                 enviarDadosAPI(
                     document.getElementById("firstName").value,
@@ -171,7 +252,7 @@
                 );
             }
         });
-
+    
         // Navegação entre as etapas
         nextBtns.forEach(button => {
             button.addEventListener("click", () => {
@@ -187,7 +268,7 @@
                 }
             });
         });
-
+    
         prevBtns.forEach(button => {
             button.addEventListener("click", () => {
                 steps[currentStep].classList.remove("form-step-active");
@@ -197,27 +278,22 @@
                 indicators[currentStep].classList.add("active");
             });
         });
-
+    
+        // Função para enviar os dados à API
         function enviarDadosAPI(nome, sobrenome, email, telefone) {
-            const url = 'https://track.embluemail.com/contacts/event';  // URL correta para eventos
+            const url = 'https://track.embluemail.com/contacts/event';
             const headers = {
                 'Content-Type': 'application/json',
-                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ='  // Chave base64 fornecida
+                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ='
             };
             const data = {
-                "email": email,  // Email inserido pelo usuário
-                "eventName": "Simulação_Vaga_Tramasso",  // Nome do evento
+                "email": email,
+                "eventName": "Simulação_Vaga_Tramasso",
                 "attributes": {
-                    "event_items": [
-                        {
-                            "firstName": nome,
-                            "lastName": sobrenome,
-                            "phone": telefone
-                        }
-                    ]
+                    "event_items": getVagasData()
                 }
             };
-
+    
             fetch(url, {
                 method: 'POST',
                 headers: headers,
@@ -226,16 +302,11 @@
             .then(response => {
                 if (response.ok) {
                     console.log('Dados enviados com sucesso!');
-                    // Verificar se os elementos das etapas estão definidos antes de manipular as classes
-                    if (steps[currentStep] && indicators[currentStep]) {
-                        steps[currentStep].classList.remove("form-step-active");
-                        indicators[currentStep].classList.remove("active");
-                        currentStep++;
-                        steps[currentStep].classList.add("form-step-active");
-                        indicators[currentStep].classList.add("active");
-                    } else {
-                        console.error('Elemento de etapa não encontrado.');
-                    }
+                    steps[currentStep].classList.remove("form-step-active");
+                    indicators[currentStep].classList.remove("active");
+                    currentStep++;
+                    steps[currentStep].classList.add("form-step-active");
+                    indicators[currentStep].classList.add("active");
                 } else {
                     alert("Erro ao enviar dados. Tente novamente.");
                 }
@@ -245,8 +316,27 @@
                 alert('Erro ao enviar dados.');
             });
         }
-        
-        // Função para validar inputs
+    
+        // Função para pegar os dados das vagas
+        function getVagasData() {
+            const vagas = [];
+            document.querySelectorAll('.vaga-block').forEach(block => {
+                const vagaName = block.querySelector('.vagaName').value;
+                const salarioBruto = block.querySelector('.salarioBruto').value;
+                const quantidadeVagas = block.querySelector('.quantidadeVagas').value;
+                const tipoVaga = block.querySelector('.tipoVaga').value;
+    
+                vagas.push({
+                    "vagaName": vagaName,
+                    "salarioBruto": salarioBruto,
+                    "quantidadeVagas": quantidadeVagas,
+                    "tipoVaga": tipoVaga
+                });
+            });
+            return vagas;
+        }
+    
+        // Função para validar os inputs
         function validateInputs() {
             const inputs = steps[currentStep].querySelectorAll("input, select");
             let isValid = true;
@@ -260,31 +350,27 @@
             });
             return isValid;
         }
-
+    
         // Exibir resultados na terceira etapa
         function displayResults() {
-            document.getElementById("res-vaga").innerText = document.getElementById("tipoVaga").value;
-            document.getElementById("res-salario").innerText = document.getElementById("salarioBruto").value;
-            document.getElementById("res-quantidade").innerText = document.getElementById("quantidadeVagas").value;
-            const resultadoSimulacao = calcularSimulacao();
-            document.getElementById("res-simulacao").innerText = resultadoSimulacao;
+            const vagas = getVagasData();
+            document.getElementById("res-vaga").innerText = vagas.map(v => v.vagaName).join(', ');
+            document.getElementById("res-salario").innerText = vagas.map(v => v.salarioBruto).join(', ');
+            document.getElementById("res-quantidade").innerText = vagas.map(v => v.quantidadeVagas).join(', ');
+            document.getElementById("res-simulacao").innerText = vagas.map(v => calcularSimulacao(v.salarioBruto, v.tipoVaga)).join(', ');
         }
-
+    
         // Função de cálculo da simulação
-        function calcularSimulacao() {
-            const salario = parseFloat(document.getElementById("salarioBruto").value);
-            const tipo = document.getElementById("tipoVaga").value;
+        function calcularSimulacao(salario, tipo) {
             let resultado = 0;
-
             if (tipo === "Operacional") {
                 resultado = salario * 0.8;
             } else if (tipo === "Coordenacao") {
                 resultado = salario * 13.33 * 0.13;
             }
-
             return resultado.toFixed(2);
         }
-    </script>
+    </script>     
 
 </body>
 </html>
