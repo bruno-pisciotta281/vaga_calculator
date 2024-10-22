@@ -20,7 +20,7 @@
         }
 
         .form-container {
-            max-width: 400px;
+            max-width: 500px;
             margin: 50px auto;
             padding: 35px;
             border: 1px solid #ddd;
@@ -195,10 +195,11 @@
         const prevBtns = document.querySelectorAll(".btn-prev");
         const indicators = document.querySelectorAll(".step-indicator li");
         let currentStep = 0;
-        let vagaCount = 2; // Iniciar contagem da segunda vaga (pois a primeira já está aberta)
+        let vagaCount = 1; // Inicializa a contagem da primeira vaga
     
         // Função para adicionar uma nova vaga
         document.querySelector('.add-vaga-btn').addEventListener('click', function() {
+            vagaCount++; // Incrementa o contador de vagas a cada nova vaga
             const vagaContainer = document.getElementById('vaga-container');
             const vagaBlock = document.createElement('div');
             vagaBlock.classList.add('vaga-block');
@@ -221,25 +222,24 @@
                 <hr>
             `;
             vagaContainer.appendChild(vagaBlock); // Adiciona o bloco de vaga ao container
-    
+
             // Adiciona evento de clique para remover a vaga
             vagaBlock.querySelector('.remove-vaga-btn').addEventListener('click', function() {
                 vagaContainer.removeChild(vagaBlock); // Remove o bloco de vaga
                 renumerarVagas(); // Atualiza os números das vagas restantes
             });
-    
-            vagaCount++; // Incrementa o contador a cada nova vaga
         });
-    
+
         // Função para renumerar as vagas após remoção
-            function renumerarVagas() {
-                const vagas = document.querySelectorAll('.vaga-block');
-                vagas.forEach((vaga, index) => {
-                    const vagaTitle = vaga.querySelector('p strong');
-                    vagaTitle.innerText = `Vaga 0${index + 1}:`; // Atualiza o número da vaga, começando de 1
-                });
-            }
-    
+        function renumerarVagas() {
+            const vagas = document.querySelectorAll('.vaga-block');
+            vagaCount = vagas.length; // Atualiza o contador para o número de vagas restantes
+            vagas.forEach((vaga, index) => {
+                const vagaTitle = vaga.querySelector('p strong');
+                vagaTitle.innerText = `Vaga 0${index + 1}:`; // Atualiza o número da vaga, começando de 1
+            });
+        }
+            
         // Função para enviar os dados à API na segunda etapa
         document.getElementById("sendInfo").addEventListener("click", function() {
             if (validateInputs()) {
