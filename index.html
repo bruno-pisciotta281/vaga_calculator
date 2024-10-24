@@ -163,13 +163,13 @@
 
         <div class="form-step">
             <center> <h2>Etapa 2: Informações de Contato</h2> </center>
-            <input type="text" id="firstName" placeholder="Nome Completo" required>
+            <input type="text" id="allName" placeholder="Nome Completo" required>
             <input type="email" id="email" placeholder="Email Corporativo" required>
             <input type="tel" id="phone" placeholder="Telefone" required>
             <hr>
             <div class="buttons">
-                <button style="width: 50px; left: 100%;" class="btn-prev">←</button>
-                <button style="width: 50px; right: 100%;" class="btn-next" id="sendInfo">→</button>
+                <button style="width: 50px;" class="btn-prev">←</button>
+                <button style="width: 50px;" class="btn-next" id="sendInfo">→</button>
             </div>
         </div>
 
@@ -193,12 +193,7 @@
             if (validateInputs()) {
                 // Desativa o botão para evitar envios múltiplos
                 this.disabled = true;
-                enviarDadosAPI(
-                    document.getElementById("firstName").value,
-                    document.getElementById("lastName").value,
-                    document.getElementById("email").value,
-                    document.getElementById("phone").value
-                );
+                enviarDadosAPI();
             }
         });
 
@@ -238,7 +233,7 @@
             document.getElementById("vagaName").value = '';
             document.getElementById("salarioBruto").value = '';
             document.getElementById("quantidadeVagas").value = '';
-            document.getElementById("firstName").value = '';
+            document.getElementById("allName").value = '';
             document.getElementById("email").value = '';
             document.getElementById("phone").value = '';
             document.getElementById("tipoVaga").value = 'Operacional';
@@ -254,23 +249,30 @@
             document.getElementById("sendInfo").disabled = false;
         }
 
-        function enviarDadosAPI(nome, sobrenome, email, telefone) {
-            const url = 'https://track.embluemail.com/contacts/event';  // URL correta para eventos
+        function enviarDadosAPI() {
+            const vagaName = document.getElementById("vagaName").value;
+            const salarioBruto = document.getElementById("salarioBruto").value;
+            const quantidadeVagas = document.getElementById("quantidadeVagas").value;
+            const tipoVaga = document.getElementById("tipoVaga").value;
+            const nomeCompleto = document.getElementById("allName").value;
+            const email = document.getElementById("email").value;
+            const telefone = document.getElementById("phone").value;
+
+            const url = 'https://track.embluemail.com/contacts/event';
             const headers = {
                 'Content-Type': 'application/json',
-                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ='  // Chave base64 fornecida
+                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ='
             };
             const data = {
                 "email": email,  // Email inserido pelo usuário
-                "eventName": "Simulação_Vaga_Tramasso",  // Nome do evento
+                "eventName": "Simulação_Vaga_Tramasso",
                 "attributes": {
-                    "event_items": [
-                        {
-                            "firstName": nome,
-                            "lastName": sobrenome,
-                            "phone": telefone
-                        }
-                    ]
+                    "vagaName": vagaName,
+                    "salarioBruto": salarioBruto,
+                    "quantidadeVagas": quantidadeVagas,
+                    "tipoVaga": tipoVaga,
+                    "firstName": nomeCompleto,
+                    "phone": telefone
                 }
             };
 
@@ -296,7 +298,7 @@
                 alert('Erro ao enviar dados.');
             });
         }
-        
+
         // Função para validar inputs
         function validateInputs() {
             const inputs = steps[currentStep].querySelectorAll("input, select");
