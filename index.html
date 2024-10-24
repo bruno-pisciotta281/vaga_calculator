@@ -201,11 +201,11 @@
         nextBtns.forEach(button => {
             button.addEventListener("click", () => {
                 if (validateInputs()) {
-                    steps[currentStep].classList.remove("form-step-active");
-                    indicators[currentStep].classList.remove("active");
+                    steps[currentStep]?.classList.remove("form-step-active");
+                    indicators[currentStep]?.classList.remove("active");
                     currentStep++;
-                    steps[currentStep].classList.add("form-step-active");
-                    indicators[currentStep].classList.add("active");
+                    steps[currentStep]?.classList.add("form-step-active");
+                    indicators[currentStep]?.classList.add("active");
                     if (currentStep === steps.length - 1) {
                         displayResults();
                     }
@@ -215,11 +215,11 @@
 
         prevBtns.forEach(button => {
             button.addEventListener("click", () => {
-                steps[currentStep].classList.remove("form-step-active");
-                indicators[currentStep].classList.remove("active");
+                steps[currentStep]?.classList.remove("form-step-active");
+                indicators[currentStep]?.classList.remove("active");
                 currentStep--;
-                steps[currentStep].classList.add("form-step-active");
-                indicators[currentStep].classList.add("active");
+                steps[currentStep]?.classList.add("form-step-active");
+                indicators[currentStep]?.classList.add("active");
             });
         });
 
@@ -239,24 +239,24 @@
             document.getElementById("tipoVaga").value = 'Operacional';
 
             // Resetando a navegação entre as etapas
-            steps[currentStep].classList.remove("form-step-active");
-            indicators[currentStep].classList.remove("active");
+            steps[currentStep]?.classList.remove("form-step-active");
+            indicators[currentStep]?.classList.remove("active");
             currentStep = 0;
-            steps[currentStep].classList.add("form-step-active");
-            indicators[currentStep].classList.add("active");
+            steps[currentStep]?.classList.add("form-step-active");
+            indicators[currentStep]?.classList.add("active");
 
             // Reativando o botão de envio
             document.getElementById("sendInfo").disabled = false;
         }
 
         function enviarDadosAPI() {
-            const vagaName = document.getElementById("vagaName").value;
-            const salarioBruto = document.getElementById("salarioBruto").value;
-            const quantidadeVagas = document.getElementById("quantidadeVagas").value;
-            const tipoVaga = document.getElementById("tipoVaga").value;
-            const nomeCompleto = document.getElementById("allName").value;
-            const email = document.getElementById("email").value;
-            const telefone = document.getElementById("phone").value;
+            const vagaName = document.getElementById("vagaName")?.value;
+            const salarioBruto = document.getElementById("salarioBruto")?.value;
+            const quantidadeVagas = document.getElementById("quantidadeVagas")?.value;
+            const tipoVaga = document.getElementById("tipoVaga")?.value;
+            const nomeCompleto = document.getElementById("allName")?.value;
+            const email = document.getElementById("email")?.value;
+            const telefone = document.getElementById("phone")?.value;
 
             const url = 'https://track.embluemail.com/contacts/event';
             const headers = {
@@ -264,7 +264,7 @@
                 'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ='
             };
             const data = {
-                "email": email,  // Email inserido pelo usuário
+                "email": email,
                 "eventName": "Simulação_Vaga_Tramasso",
                 "attributes": {
                     "vagaName": vagaName,
@@ -284,11 +284,11 @@
             .then(response => {
                 if (response.ok) {
                     console.log('Dados enviados com sucesso!');
-                    steps[currentStep].classList.remove("form-step-active");
-                    indicators[currentStep].classList.remove("active");
+                    steps[currentStep]?.classList.remove("form-step-active");
+                    indicators[currentStep]?.classList.remove("active");
                     currentStep++;
-                    steps[currentStep].classList.add("form-step-active");
-                    indicators[currentStep].classList.add("active");
+                    steps[currentStep]?.classList.add("form-step-active");
+                    indicators[currentStep]?.classList.add("active");
                 } else {
                     alert("Erro ao enviar dados. Tente novamente.");
                 }
@@ -301,9 +301,9 @@
 
         // Função para validar inputs
         function validateInputs() {
-            const inputs = steps[currentStep].querySelectorAll("input, select");
+            const inputs = steps[currentStep]?.querySelectorAll("input, select");
             let isValid = true;
-            inputs.forEach(input => {
+            inputs?.forEach(input => {
                 if (!input.value.trim()) {
                     input.classList.add("error");
                     isValid = false;
@@ -316,17 +316,24 @@
 
         // Exibir resultados na terceira etapa
         function displayResults() {
-            document.getElementById("res-vaga").innerText = document.getElementById("tipoVaga").value;
-            document.getElementById("res-salario").innerText = document.getElementById("salarioBruto").value;
-            document.getElementById("res-quantidade").innerText = document.getElementById("quantidadeVagas").value;
-            const resultadoSimulacao = calcularSimulacao();
-            document.getElementById("res-simulacao").innerText = resultadoSimulacao;
+            const vaga = document.getElementById("vagaName")?.value;
+            const salario = document.getElementById("salarioBruto")?.value;
+            const quantidade = document.getElementById("quantidadeVagas")?.value;
+
+            // Exibir resultados, verifique se o elemento existe antes de acessar
+            const vagaResult = document.getElementById("res-vaga");
+            const salarioResult = document.getElementById("res-salario");
+            const quantidadeResult = document.getElementById("res-quantidade");
+
+            if (vagaResult) vagaResult.innerText = vaga || "N/A";
+            if (salarioResult) salarioResult.innerText = salario || "N/A";
+            if (quantidadeResult) quantidadeResult.innerText = quantidade || "N/A";
         }
 
         // Função de cálculo da simulação
         function calcularSimulacao() {
-            const salario = parseFloat(document.getElementById("salarioBruto").value);
-            const tipo = document.getElementById("tipoVaga").value;
+            const salario = parseFloat(document.getElementById("salarioBruto")?.value);
+            const tipo = document.getElementById("tipoVaga")?.value;
             let resultado = 0;
 
             if (tipo === "Operacional") {
