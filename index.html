@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
     <title>Simulação de Vaga</title>
     <style>
         body {
             font-family: "Montserrat", sans-serif;
         }
 
-        h1{
+        h1 {
             font-size: 25px;
             text-align: center;
         }
@@ -113,7 +111,8 @@
         .error {
             border-color: red;
         }
-        .btn-restart{
+
+        .btn-restart {
             width: 30%;
             padding: 10px;
             margin-top: 20px;
@@ -147,7 +146,7 @@
 
         <!-- Formulário com Etapas -->
         <div class="form-step form-step-active">
-           <center> <h2>Etapa 1: Informações da Vaga</h2> </center>
+           <center><h2>Etapa 1: Informações da Vaga</h2></center>
             <input type="text" id="vagaName" placeholder="Nome Vaga – Ex. Coordenador de Marketing" required>
             <input type="number" id="salarioBruto" placeholder="Salário Bruto – Ex. 8.900,00" required>
             <input type="number" id="quantidadeVagas" placeholder="Quantidade de Vagas – Ex. 100" required>
@@ -162,7 +161,7 @@
         </div>
 
         <div class="form-step">
-            <center> <h2>Etapa 2: Informações de Contato</h2> </center>
+            <center><h2>Etapa 2: Informações de Contato</h2></center>
             <input type="text" id="allName" placeholder="Nome Completo" required>
             <input type="email" id="email" placeholder="Email Corporativo" required>
             <input type="tel" id="phone" placeholder="Telefone" required>
@@ -174,10 +173,10 @@
         </div>
 
         <div class="form-step">
-            <center> <h2>Etapa 3: Agora é com a nossa equipe!</h2> </center>
+            <center><h2>Agora é com a nossa equipe!</h2></center>
             <center><p style="font-size: small;"> <strong>Sua simulação está sendo processada pelo nosso time comercial e em breve o resultado chegará em seu e-mail.</strong></p></center>
-                <hr>
-             <center> <button class="btn-restart">Refazer Simulação</button> </center>
+            <hr>
+            <center><button class="btn-restart">Refazer Simulação</button></center>
         </div>
     </div>
 
@@ -206,9 +205,6 @@
                     currentStep++;
                     steps[currentStep]?.classList.add("form-step-active");
                     indicators[currentStep]?.classList.add("active");
-                    if (currentStep === steps.length - 1) {
-                        displayResults();
-                    }
                 }
             });
         });
@@ -250,13 +246,13 @@
         }
 
         function enviarDadosAPI() {
-            const vagaName = document.getElementById("vagaName")?.value;
-            const salarioBruto = document.getElementById("salarioBruto")?.value;
-            const quantidadeVagas = document.getElementById("quantidadeVagas")?.value;
-            const tipoVaga = document.getElementById("tipoVaga")?.value;
-            const nomeCompleto = document.getElementById("allName")?.value;
-            const email = document.getElementById("email")?.value;
-            const telefone = document.getElementById("phone")?.value;
+            const vagaName = document.getElementById("vagaName").value;
+            const salarioBruto = document.getElementById("salarioBruto").value;
+            const quantidadeVagas = document.getElementById("quantidadeVagas").value;
+            const tipoVaga = document.getElementById("tipoVaga").value;
+            const nomeCompleto = document.getElementById("allName").value;
+            const email = document.getElementById("email").value;
+            const telefone = document.getElementById("phone").value;
 
             const url = 'https://track.embluemail.com/contacts/event';
             const headers = {
@@ -284,6 +280,7 @@
             .then(response => {
                 if (response.ok) {
                     console.log('Dados enviados com sucesso!');
+                    // Avançar para a próxima etapa após envio
                     steps[currentStep]?.classList.remove("form-step-active");
                     indicators[currentStep]?.classList.remove("active");
                     currentStep++;
@@ -314,36 +311,6 @@
             return isValid;
         }
 
-        // Exibir resultados na terceira etapa
-        function displayResults() {
-            const vaga = document.getElementById("vagaName")?.value;
-            const salario = document.getElementById("salarioBruto")?.value;
-            const quantidade = document.getElementById("quantidadeVagas")?.value;
-
-            // Exibir resultados, verifique se o elemento existe antes de acessar
-            const vagaResult = document.getElementById("res-vaga");
-            const salarioResult = document.getElementById("res-salario");
-            const quantidadeResult = document.getElementById("res-quantidade");
-
-            if (vagaResult) vagaResult.innerText = vaga || "N/A";
-            if (salarioResult) salarioResult.innerText = salario || "N/A";
-            if (quantidadeResult) quantidadeResult.innerText = quantidade || "N/A";
-        }
-
-        // Função de cálculo da simulação
-        function calcularSimulacao() {
-            const salario = parseFloat(document.getElementById("salarioBruto")?.value);
-            const tipo = document.getElementById("tipoVaga")?.value;
-            let resultado = 0;
-
-            if (tipo === "Operacional") {
-                resultado = salario * 0.8;
-            } else if (tipo === "Coordenacao") {
-                resultado = salario * 13.33 * 0.13;
-            }
-
-            return resultado.toFixed(2);
-        }
     </script>
 
 </body>
