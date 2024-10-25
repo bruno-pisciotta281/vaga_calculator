@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -129,6 +129,25 @@
             justify-content: space-between;
         }
 
+        .check {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .check input[type="checkbox"] {
+            margin: 0;
+            margin-right: 5px;
+            width: auto; /* Importante: remove o width: 100% que está afetando todos os inputs */
+        }
+
+        .check label {
+            margin: 0;
+            display: inline;
+            width: auto; /* Importante: remove o width: 100% dos inputs */
+        }
+
     </style>
 </head>
 <body>
@@ -165,6 +184,14 @@
             <input type="text" id="allName" placeholder="Nome Completo" required>
             <input type="email" id="email" placeholder="Email Corporativo" required>
             <input type="tel" id="phone" placeholder="Telefone" required>
+            <div class="check">
+                <input type="checkbox" id="terms" checked>
+                <label style="font-size: 12px;" for="terms">Concordo com os termos de <span style="text-decoration: underline;"><a target="_blank" href="https://tramassoidh.com.br/politica-de-privacidade/">Política de Privacidade.</a><span></label>
+            </div>
+            <div class="check">
+                <input type="checkbox" id="terms" checked>
+                <label style="font-size: 12px;" for="terms">Concordo com os termos de <span style="text-decoration: underline;"><a target="_blank" href="https://tramassoidh.com.br/codigo-de-conduta/">Uso do Site.</a><span></label>
+            </div>
             <hr>
             <div class="buttons">
                 <button style="width: 50px;" class="btn-prev">←</button>
