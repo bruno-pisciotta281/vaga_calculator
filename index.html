@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -148,7 +148,7 @@
         <div class="form-step form-step-active">
            <center><h2>Etapa 1: Informações da Vaga</h2></center>
             <input type="text" id="vagaName" placeholder="Nome Vaga – Ex. Coordenador de Marketing" required>
-            <input type="number" id="salarioBruto" placeholder="Salário Bruto – Ex. 8.900,00" required>
+            <input type="text" id="salarioBruto" placeholder="Salário Bruto – Ex. 8.900,00" oninput="formatCurrency(this)" required>
             <input type="number" id="quantidadeVagas" placeholder="Quantidade de Vagas – Ex. 100" required>
 
             <label for="tipoVaga">Tipo de Vaga:</label>
@@ -218,7 +218,24 @@
                 indicators[currentStep]?.classList.add("active");
             });
         });
-    
+
+        function formatCurrency(input) {
+            let value = input.value;
+            
+            // Remove tudo que não for número ou vírgula
+            value = value.replace(/\D/g, "");
+            
+            // Adiciona os zeros iniciais, se necessário
+            value = (value / 100).toFixed(2) + "";
+            
+            // Adiciona o ponto de milhares
+            value = value.replace(".", ",");
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            
+            // Atualiza o campo com o valor formatado
+            input.value = value;
+        }
+
         // Função para reiniciar a simulação
         document.querySelector(".btn-restart").addEventListener("click", function() {
             resetTest();
