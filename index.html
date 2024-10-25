@@ -288,7 +288,7 @@
                     // Garantir que a última etapa seja exibida após o envio
                     steps[currentStep]?.classList.remove("form-step-active");
                     indicators[currentStep]?.classList.remove("active");
-                    currentStep++; // Atualiza o contador para a última etapa
+                    currentStep = 2; // Forçar o currentStep para a terceira etapa (última)
                     steps[currentStep]?.classList.add("form-step-active");
                     indicators[currentStep]?.classList.add("active");
                 } else {
