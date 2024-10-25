@@ -285,10 +285,10 @@
             .then(response => {
                 if (response.ok) {
                     console.log('Dados enviados com sucesso!');
-                    // Avançar para a próxima etapa após envio
+                    // Garantir que a última etapa seja exibida após o envio
                     steps[currentStep]?.classList.remove("form-step-active");
                     indicators[currentStep]?.classList.remove("active");
-                    currentStep++;
+                    currentStep++; // Atualiza o contador para a última etapa
                     steps[currentStep]?.classList.add("form-step-active");
                     indicators[currentStep]?.classList.add("active");
                 } else {
