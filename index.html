@@ -186,7 +186,7 @@
         const prevBtns = document.querySelectorAll(".btn-prev");
         const indicators = document.querySelectorAll(".step-indicator li");
         let currentStep = 0;
-
+    
         // Função para enviar os dados à API na segunda etapa
         document.getElementById("sendInfo").addEventListener("click", function() {
             if (validateInputs()) {
@@ -195,7 +195,7 @@
                 enviarDadosAPI();
             }
         });
-
+    
         // Navegação entre as etapas
         nextBtns.forEach(button => {
             button.addEventListener("click", () => {
@@ -208,7 +208,7 @@
                 }
             });
         });
-
+    
         prevBtns.forEach(button => {
             button.addEventListener("click", () => {
                 steps[currentStep]?.classList.remove("form-step-active");
@@ -218,12 +218,12 @@
                 indicators[currentStep]?.classList.add("active");
             });
         });
-
+    
         // Função para reiniciar a simulação
         document.querySelector(".btn-restart").addEventListener("click", function() {
             resetTest();
         });
-
+    
         function resetTest() {
             // Resetando os campos de entrada
             document.getElementById("vagaName").value = '';
@@ -233,18 +233,18 @@
             document.getElementById("email").value = '';
             document.getElementById("phone").value = '';
             document.getElementById("tipoVaga").value = 'Operacional';
-
+    
             // Resetando a navegação entre as etapas
             steps[currentStep]?.classList.remove("form-step-active");
             indicators[currentStep]?.classList.remove("active");
             currentStep = 0;
             steps[currentStep]?.classList.add("form-step-active");
             indicators[currentStep]?.classList.add("active");
-
+    
             // Reativando o botão de envio
             document.getElementById("sendInfo").disabled = false;
         }
-
+    
         function enviarDadosAPI() {
             const vagaName = document.getElementById("vagaName").value;
             const salarioBruto = document.getElementById("salarioBruto").value;
@@ -253,7 +253,7 @@
             const nomeCompleto = document.getElementById("allName").value;
             const email = document.getElementById("email").value;
             const telefone = document.getElementById("phone").value;
-
+    
             const url = 'https://track.embluemail.com/contacts/event';
             const headers = {
                 'Content-Type': 'application/json',
@@ -263,15 +263,19 @@
                 "email": email,
                 "eventName": "Simulação_Vaga_Tramasso",
                 "attributes": {
-                    "vagaName": vagaName,
-                    "salarioBruto": salarioBruto,
-                    "quantidadeVagas": quantidadeVagas,
-                    "tipoVaga": tipoVaga,
-                    "firstName": nomeCompleto,
-                    "phone": telefone
+                    "event_items": [
+                        {
+                            "vagaName": vagaName,
+                            "salarioBruto": salarioBruto,
+                            "quantidadeVagas": quantidadeVagas,
+                            "tipoVaga": tipoVaga,
+                            "firstName": nomeCompleto,
+                            "phone": telefone
+                        }
+                    ]
                 }
             };
-
+    
             fetch(url, {
                 method: 'POST',
                 headers: headers,
@@ -295,7 +299,7 @@
                 alert('Erro ao enviar dados.');
             });
         }
-
+    
         // Função para validar inputs
         function validateInputs() {
             const inputs = steps[currentStep]?.querySelectorAll("input, select");
@@ -310,8 +314,7 @@
             });
             return isValid;
         }
-
-    </script>
+    </script>    
 
 </body>
 </html>
