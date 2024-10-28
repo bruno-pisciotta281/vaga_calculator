@@ -13,23 +13,24 @@
         }
 
         h1 {
-            font-size: 25px;
+            font-size: 20px; /* Reduzido de 25px para 20px */
             text-align: center;
         }
 
         .form-container {
-            max-width: 450px;
-            margin: 50px auto;
-            padding: 40px;
+            max-width: 380px; /* Reduzido de 450px para 380px */
+            margin: 30px auto;
+            padding: 30px; /* Reduzido de 40px para 30px */
+            background-color: white;
             border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px; /* Reduzido para harmonizar com o tamanho */
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
         }
 
         .step-indicator {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Reduzido de 20px para 15px */
             list-style-type: none;
             padding: 0;
             position: relative;
@@ -51,6 +52,7 @@
             text-align: center;
             position: relative;
             z-index: 1;
+            font-size: 12px; /* Diminuído o tamanho da fonte */
             font-weight: bold;
         }
 
@@ -59,9 +61,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 30px;
-            height: 30px;
-            margin: 0 auto 10px;
+            width: 24px; /* Reduzido de 30px para 24px */
+            height: 24px; /* Reduzido de 30px para 24px */
+            margin: 0 auto 8px;
             background-color: #ddd;
             border-radius: 50%;
             color: #fff;
@@ -82,21 +84,23 @@
         input, select {
             display: block;
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
+            padding: 8px; /* Reduzido de 10px para 8px */
+            margin: 8px 0; /* Reduzido de 10px para 8px */
             border: 1px solid #ddd;
             border-radius: 5px;
+            font-size: 14px; /* Diminuído para harmonizar com o tamanho */
         }
 
         button {
-            width: 10%;
-            padding: 10px;
-            margin-top: 20px;
+            width: 48px; /* Definido um tamanho menor */
+            padding: 8px; /* Reduzido de 10px para 8px */
+            margin-top: 15px; /* Reduzido de 20px para 15px */
             background-color: #bcdc04;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 14px;
         }
 
         button.btn-prev {
@@ -113,15 +117,15 @@
         }
 
         .btn-restart {
-            width: 30%;
-            padding: 10px;
-            margin-top: 20px;
+            width: 80%; /* Reduzido para 80% do contêiner */
+            padding: 8px;
             background-color: #bcdc04;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin: 0 auto;
+            margin: 10px auto;
+            font-size: 14px;
         }
 
         .buttons {
@@ -132,20 +136,21 @@
         .check {
             display: flex;
             align-items: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            font-size: 12px; /* Reduzido para harmonizar com o tamanho */
         }
 
         .check input[type="checkbox"] {
             margin: 0;
             margin-right: 5px;
-            width: auto; /* Importante: remove o width: 100% que está afetando todos os inputs */
+            width: auto;
         }
 
         .check label {
             margin: 0;
             display: inline;
-            width: auto; /* Importante: remove o width: 100% dos inputs */
+            width: auto;
         }
 
     </style>
@@ -154,8 +159,7 @@
 
     <div class="form-container">
         <h1>Calculadora "Fee" de Vagas</h1>
-        <center><p>Informe os dados da vaga e obtenha uma cotação online e
-            gratuita.</p></center>
+        <center><p style="font-size: 14px;">Informe os dados da vaga e obtenha uma cotação online e gratuita.</p></center>
         <!-- Barra de Progresso -->
         <ul class="step-indicator">
             <li class="active" data-step="1"></li>
@@ -165,43 +169,43 @@
 
         <!-- Formulário com Etapas -->
         <div class="form-step form-step-active">
-           <center><h2>Etapa 1: Informações da Vaga</h2></center>
+           <center><h2 style="font-size: 18px;">Etapa 1: Informações da Vaga</h2></center>
             <input type="text" id="vagaName" placeholder="Nome Vaga – Ex. Coordenador de Marketing" required>
             <input type="text" id="salarioBruto" placeholder="Salário Bruto – Ex. 8.900,00" oninput="formatCurrency(this)" required>
             <input type="number" id="quantidadeVagas" placeholder="Quantidade de Vagas – Ex. 100" required>
 
-            <label for="tipoVaga">Tipo de Vaga:</label>
+            <label for="tipoVaga" style="font-size: 12px;">Tipo de Vaga:</label>
             <select id="tipoVaga">
               <option value="Operacional">Operacional</option>
               <option value="Coordenacao">Coordenação</option>
             </select>
             <hr>
-            <button style="margin-left: 90%;" class="btn-next">→</button>
+            <button class="btn-next">→</button>
         </div>
 
         <div class="form-step">
-            <center><h2>Etapa 2: Informações de Contato</h2></center>
+            <center><h2 style="font-size: 18px;">Etapa 2: Informações de Contato</h2></center>
             <input type="text" id="allName" placeholder="Nome Completo" required>
             <input type="email" id="email" placeholder="Email Corporativo" required>
             <input type="tel" id="phone" placeholder="Telefone" required>
             <div class="check">
                 <input type="checkbox" id="terms" checked>
-                <label style="font-size: 12px;" for="terms">Concordo com os termos de <span style="text-decoration: underline;"><a target="_blank" href="https://tramassoidh.com.br/politica-de-privacidade/">Política de Privacidade.</a><span></label>
+                <label for="terms">Concordo com os termos de <a target="_blank" href="https://tramassoidh.com.br/politica-de-privacidade/">Política de Privacidade</a>.</label>
             </div>
             <div class="check">
                 <input type="checkbox" id="terms" checked>
-                <label style="font-size: 12px;" for="terms">Concordo com os termos de <span style="text-decoration: underline;"><a target="_blank" href="https://tramassoidh.com.br/codigo-de-conduta/">Uso do Site.</a><span></label>
+                <label for="terms">Concordo com os termos de <a target="_blank" href="https://tramassoidh.com.br/codigo-de-conduta/">Uso do Site</a>.</label>
             </div>
             <hr>
             <div class="buttons">
-                <button style="width: 50px;" class="btn-prev">←</button>
-                <button style="width: 50px;" class="btn-next" id="sendInfo">→</button>
+                <button class="btn-prev">←</button>
+                <button class="btn-next" id="sendInfo">→</button>
             </div>
         </div>
 
         <div class="form-step">
-            <center><h2>Agora é com a nossa equipe!</h2></center>
-            <center><p style="font-size: small;"> <strong>Sua simulação está sendo processada pelo nosso time comercial e em breve o resultado chegará em seu e-mail.</strong></p></center>
+            <center><h2 style="font-size: 18px;">Agora é com a nossa equipe!</h2></center>
+            <center><p style="font-size: 12px;">Sua simulação está sendo processada e em breve o resultado chegará em seu e-mail.</p></center>
             <hr>
             <center><button class="btn-restart">Refazer Simulação</button></center>
         </div>
