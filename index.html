@@ -1,1 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Simulação de Vaga</title>
+    <style>
+        body {
+            font-family: "Montserrat", sans-serif;
+        }
 
+        h1 {
+            font-size: 20px; 
+            text-align: center;
+        }
+
+        .form-container {
+            max-width: 380px; 
+            margin: 30px auto;
+            padding: 30px; 
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px; 
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px; 
+            list-style-type: none;
+            padding: 0;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #ddd;
+            z-index: 0;
+        }
+
+        .step-indicator li {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            font-size: 12px; 
+            font-weight: bold;
+        }
+
+        .step-indicator li::before {
+            content: attr(data-step);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; 
+            height: 24px; 
+            margin: 0 auto 8px;
+            background-color: #ddd;
+            border-radius: 50%;
+            color: #fff;
+        }
+
+        .step-indicator li.active::before {
+            background-color: #bcdc04;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step-active {
+            display: block;
+        }
+
+        input, select {
+            display: block;
+            width: 100%;
+            padding: 8px; 
+            margin: 8px 0; 
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px; 
+        }
+
+        button {
+            width: 48px; 
+            padding: 8px; 
+            margin-top: 15px; 
+            background-color: #bcdc04;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .teste{
+            display: flex;
+            justify-content: right; 
+        }
+
+        button.btn-prev {
+            background-color: #f44336;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error {
+            border-color: red;
+        }
+
+        .btn-restart {
+            width: 80%; 
+            padding: 8px;
+            background-color: #bcdc04;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px auto;
+            font-size: 14px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .check {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            font-size: 12px; 
+        }
+
+        .check input[type="checkbox"] {
+            margin: 0;
+            margin-right: 5px;
+            width: auto;
+        }
+
+        .check label {
+            margin: 0;
+            display: inline;
+            width: auto;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h1>Calculadora "Fee" de Vagas</h1>
+        <center><p style="font-size: 14px;">Informe os dados da vaga e obtenha uma cotação online e gratuita.</p></center>
+        <!-- barra de Progresso -->
+        <ul class="step-indicator">
+            <li class="active" data-step="1"></li>
+            <li data-step="2"></li>
+            <li data-step="3"></li>
+        </ul>
+
+        <!-- formulário com Etapas -->
+        <div class="form-step form-step-active">
+           <center><h2 style="font-size: 18px;">Etapa 1: Informações da Vaga</h2></center>
+            <input type="text" id="vagaName" placeholder="Nome Vaga – Ex. Coordenador de Marketing" required>
+            <input type="text" id="salarioBruto" placeholder="Salário Bruto – Ex. 8.900,00" oninput="formatCurrency(this)" required>
+            <input type="number" id="quantidadeVagas" placeholder="Quantidade de Vagas – Ex. 100" required>
+
+            <label for="tipoVaga" style="font-size: 12px;">Tipo de Vaga:</label>
+            <select id="tipoVaga">
+              <option value="Operacional">Operacional</option>
+              <option value="Coordenacao">Coordenação</option>
+            </select>
+            <hr>
+            <div class="teste">
+                <button class="btn-next">→</button>
+            </div>
+        </div>
+
+        <div class="form-step">
+            <center><h2 style="font-size: 18px;">Etapa 2: Informações de Contato</h2></center>
+            <input type="text" id="allName" placeholder="Nome Completo" required>
+            <input type="email" id="email" placeholder="Email Corporativo" required>
+            <input type="tel" id="phone" placeholder="Telefone" required>
+            <div class="check">
+                <input type="checkbox" id="terms" checked>
+                <label for="terms">Concordo com os termos de <a target="_blank" href="https://tramassoidh.com.br/politica-de-privacidade/">Política de Privacidade</a>.</label>
+            </div>
+            <div class="check">
+                <input type="checkbox" id="terms" checked>
+                <label for="terms">Concordo com os termos de <a target="_blank" href="https://tramassoidh.com.br/codigo-de-conduta/">Uso do Site</a>.</label>
+            </div>
+            <hr>
+            <div class="buttons">
+                <button class="btn-prev">←</button>
+                <button class="btn-next" id="sendInfo">→</button>
+            </div>
+        </div>
+
+        <div class="form-step">
+            <center><h2 style="font-size: 18px;">Agora é com a nossa equipe!</h2></center>
+            <center><p style="font-size: 12px;">Sua simulação está sendo processada e em breve o resultado chegará em seu e-mail.</p></center>
+            <hr>
+            <center><button class="btn-restart">Refazer Simulação</button></center>
+        </div>
+    </div>
+
+    <script>
+        const steps = Array.from(document.querySelectorAll(".form-step"));
+        const nextBtns = document.querySelectorAll(".btn-next");
+        const prevBtns = document.querySelectorAll(".btn-prev");
+        const indicators = document.querySelectorAll(".step-indicator li");
+        let currentStep = 0;
+    
+        // enviar os dados à API na segunda etapa
+        document.getElementById("sendInfo").addEventListener("click", function() {
+            if (validateInputs()) {
+                // desativa o botão para evitar envios múltiplos
+                this.disabled = true;
+                enviarDadosAPI();
+            }
+        });
+    
+        // navegação das etapas
+        nextBtns.forEach(button => {
+            button.addEventListener("click", () => {
+                if (validateInputs()) {
+                    steps[currentStep]?.classList.remove("form-step-active");
+                    indicators[currentStep]?.classList.remove("active");
+                    currentStep++;
+                    steps[currentStep]?.classList.add("form-step-active");
+                    indicators[currentStep]?.classList.add("active");
+                }
+            });
+        });
+    
+        prevBtns.forEach(button => {
+            button.addEventListener("click", () => {
+                steps[currentStep]?.classList.remove("form-step-active");
+                indicators[currentStep]?.classList.remove("active");
+                currentStep--;
+                steps[currentStep]?.classList.add("form-step-active");
+                indicators[currentStep]?.classList.add("active");
+            });
+        });
+
+        function formatCurrency(input) {
+            let value = input.value;
+            
+            // remove tudo que não for número ou vírgula
+            value = value.replace(/\D/g, "");
+            
+            // adiciona os zeros iniciais, se necessário
+            value = (value / 100).toFixed(2) + "";
+            
+            // adiciona o ponto de milhares
+            value = value.replace(".", ",");
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            
+            // atualiza o campo com o valor formatado
+            input.value = value;
+        }
+
+        // reiniciar a simulação
+        document.querySelector(".btn-restart").addEventListener("click", function() {
+            resetTest();
+        });
+    
+        function resetTest() {
+            // resetando os campos de entrada
+            document.getElementById("vagaName").value = '';
+            document.getElementById("salarioBruto").value = '';
+            document.getElementById("quantidadeVagas").value = '';
+            document.getElementById("allName").value = '';
+            document.getElementById("email").value = '';
+            document.getElementById("phone").value = '';
+            document.getElementById("tipoVaga").value = 'Operacional';
+    
+            // resetando a navegação entre as etapas
+            steps[currentStep]?.classList.remove("form-step-active");
+            indicators[currentStep]?.classList.remove("active");
+            currentStep = 0;
+            steps[currentStep]?.classList.add("form-step-active");
+            indicators[currentStep]?.classList.add("active");
+    
+            // reativando o botão de envio
+            document.getElementById("sendInfo").disabled = false;
+        }
+    
+        function enviarDadosAPI() {
+            const vagaName = document.getElementById("vagaName").value;
+            const salarioBruto = document.getElementById("salarioBruto").value;
+            const quantidadeVagas = document.getElementById("quantidadeVagas").value;
+            const tipoVaga = document.getElementById("tipoVaga").value;
+            const nomeCompleto = document.getElementById("allName").value;
+            const email = document.getElementById("email").value;
+            const telefone = document.getElementById("phone").value;
+
+            const url = 'https://track.embluemail.com/contacts/event';
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic MzUwYWIwOTFiZjc4NDBmMmFiMjMwMjUxYTMzYWZiNzQ='
+            };
+
+            // estrutura de dados revisada
+            const data = {
+                "eventName": "Simulacao_Vaga_Tramasso",
+                "email": email,
+                "attributes": {
+                    "vagaName": vagaName,
+                    "salarioBruto": salarioBruto,
+                    "quantidadeVagas": quantidadeVagas,
+                    "tipoVaga": tipoVaga,
+                    "nomeCompleto": nomeCompleto,
+                    "telefone": telefone
+                }
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Dados enviados com sucesso!');
+                    // exibe a última etapa após o envio bem-sucedido
+                    steps[currentStep]?.classList.remove("form-step-active");
+                    indicators[currentStep]?.classList.remove("active");
+                    currentStep = 2; // muda para a terceira etapa (última)
+                    steps[currentStep]?.classList.add("form-step-active");
+                    indicators[currentStep]?.classList.add("active");
+                } else {
+                    alert("Erro ao enviar dados. Tente novamente.");
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao enviar dados:', error);
+                alert('Erro ao enviar dados.');
+            });
+        }
+    
+        // função para validar inputs
+        function validateInputs() {
+            const inputs = steps[currentStep]?.querySelectorAll("input, select");
+            let isValid = true;
+            inputs?.forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add("error");
+                    isValid = false;
+                } else {
+                    input.classList.remove("error");
+                }
+            });
+            return isValid;
+        }
+    </script>    
+
+</body>
+
+</html>
